@@ -1,18 +1,33 @@
 package es.us.colometer.app.camera;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 
+import es.us.colometer.app.exceptions.CameraNotAvailableException;
+
 /**
- * Class that contains the code from android developers tutorial.
- * For testing purposes only. When managed to get camera working
- * desired functionality must be implemented into other class and
- * this one must be deleted...forever.
+ * Class that gives a camera instance in a secure way.
  */
 public class CameraManager {
+    //TODO: this class must provide a singleton object.
 
-    /** Check if this device has a camera */
+    /** A safe way to get an instance of the Camera object. */
+    public static Camera getCameraInstance(){
+        Camera c = null;
+        try {
+            c = Camera.open(); // attempt to get a Camera instance
+        }
+        catch (Exception e){
+            throw new CameraNotAvailableException("camera could not be opened, " +
+                    "maybe it's being used by other process or it's disabled by the device policy manager");
+        }
+        return c; // returns null if camera is unavailable
+    }
+
+
+    // Ancillary methods ---------------------------------------------------------------------------
     private boolean checkCameraHardware(Context context) {
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
             // this device has a camera
@@ -23,17 +38,7 @@ public class CameraManager {
         }
     }
 
-    /** A safe way to get an instance of the Camera object. */
-    public static Camera getCameraInstance(){
-        Camera c = null;
-        try {
-            c = Camera.open(); // attempt to get a Camera instance
-        }
-        catch (Exception e){
-            // Camera is not available (in use or does not exist)
-        }
-        return c; // returns null if camera is unavailable
-    }
+
 
 }
 
