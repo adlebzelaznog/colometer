@@ -99,26 +99,15 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
     // Camera Callbacks
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-        // lo que sea
-        // Sacas el bitmap
-        // Lees el color o lo que tengas que hacer
-        // Y desde este método le pasas los datos al TextView que tengas en la activity,
-        // o lo que sea que hagas para mostrar el color.
-
-        /*
-        Camera.Size previewSize = camera.getParameters().getPreviewSize();
-        int size = previewSize.height * previewSize.width;
-
-        if(currentImage!=null) currentImage.recycle();
-        currentImage = BitmapFactory.decodeByteArray(data, 0, size);
-        */
-
         // By default preview data is in NV21 format, if needed it must be converted
         Camera.Size previewSize = camera.getParameters().getPreviewSize();
-        ColorModelConverter converter = new ColorModelConverter(previewSize.height, previewSize.width);
+        int height = previewSize.height;
+        int width = previewSize.width;
+
+        ColorModelConverter converter = new ColorModelConverter(height, width);
         int[] pixels = converter.convert(data, ColorFormats.RGB);
 
-
+        int color = pickColor(pixels, height, width);
     }
 
 
@@ -172,7 +161,31 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         Log.d("David", "surfaceDestroyed");
     }
 
+    // Color picker methods ------------------------------------------------------------------------
+    private int pickColor (int[] pixels, int height, int width){
+        //TODO: get scope radius from user preferences
+        int res;
 
+        int radius = 2;
+        int total = 0;  // Total of picked pixels
+        int sum = 0;    // Sum of picked pixels
+        int centerX = height/2;
+        int centerY = width/2;
+
+        for(int i = centerX-radius; i <= centerX+radius; i++){
+            for(int j = centerY-radius; j <= centerY+radius; j++){
+                if( Math.abs((i-centerX)+(j-centerY)) <= radius){
+                    total++;
+                    sum += pixels[ i + j*width ];
+                }
+
+            }
+        }
+
+        res = sum/total;
+
+        return res;
+    }
 
 
 }
