@@ -3,7 +3,6 @@ package es.us.colometer.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +15,8 @@ import android.widget.RelativeLayout;
 import java.io.IOException;
 
 import es.us.colometer.app.camera.CameraManager;
+import es.us.colometer.app.Color.ColorFormats;
+import es.us.colometer.app.Color.ColorModelConverter;
 
 
 public class PrincipalScreen extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback {
@@ -98,17 +99,26 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
     // Camera Callbacks
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-        Log.d("David", "onPreviewFrame!!!!!!!!");
         // lo que sea
         // Sacas el bitmap
         // Lees el color o lo que tengas que hacer
         // Y desde este método le pasas los datos al TextView que tengas en la activity,
         // o lo que sea que hagas para mostrar el color.
+
+        /*
         Camera.Size previewSize = camera.getParameters().getPreviewSize();
         int size = previewSize.height * previewSize.width;
 
         if(currentImage!=null) currentImage.recycle();
         currentImage = BitmapFactory.decodeByteArray(data, 0, size);
+        */
+
+        // By default preview data is in NV21 format, if needed it must be converted
+        Camera.Size previewSize = camera.getParameters().getPreviewSize();
+        ColorModelConverter converter = new ColorModelConverter(previewSize.height, previewSize.width);
+        int[] pixels = converter.convert(data, ColorFormats.RGB);
+
+
     }
 
 
@@ -161,6 +171,8 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         // nose
         Log.d("David", "surfaceDestroyed");
     }
+
+
 
 
 }
