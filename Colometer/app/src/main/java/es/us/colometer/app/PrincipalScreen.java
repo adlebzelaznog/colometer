@@ -3,6 +3,7 @@ package es.us.colometer.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
+import es.us.colometer.app.camera.CameraFocus;
 import es.us.colometer.app.camera.CameraManager;
 import es.us.colometer.app.Color.ColorFormats;
 import es.us.colometer.app.Color.ColorModelConverter;
@@ -47,6 +49,9 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
 
         camera.setPreviewCallback(this);
         camPreview.getHolder().addCallback(this);
+        camera.setPreviewCallback(this);
+        camera.getParameters().setPreviewSize(480, 640);
+        camera.startPreview();
 
         // Set options layout on click listener
         RelativeLayout controlsLayout = (RelativeLayout) findViewById(R.id.controls_layout);
@@ -58,10 +63,9 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
                                           }
         );
 
-        // Estaba en el onSurfaceCreated
-        camera.setPreviewCallback(this);
-        camera.getParameters().setPreviewSize(480, 640);
-        camera.startPreview();
+        // Draw camera focus
+        FrameLayout cameraFocus = (FrameLayout) findViewById(R.id.cameraFocus);
+        cameraFocus.addView(new CameraFocus(this));
     }
 
     @Override
@@ -194,7 +198,9 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
     private void updateColorData(int color){
         // Update color value
         TextView colorValue = (TextView) findViewById(R.id.colorValue);
-        colorValue.setText("#"+String.format("%x",color));
+        //TODO: get color model name from share preferences
+        String colorModel = "RGB";
+        colorValue.setText(colorModel+"\n#"+String.format("%x",color));
 
         // Update color
         FrameLayout colorSample = (FrameLayout) findViewById(R.id.colorSample);

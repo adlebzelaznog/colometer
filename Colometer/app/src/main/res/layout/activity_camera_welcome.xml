@@ -11,12 +11,25 @@
         android:id="@+id/camera_preview"
         android:layout_weight="1" />
     -->
+
     <FrameLayout
-        android:id="@+id/camera_preview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1"
-        />
+        android:layout_weight="80">
+
+        <FrameLayout
+            android:id="@+id/camera_preview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:id="@+id/cameraFocus"></FrameLayout>
+    </FrameLayout>
 
     <RelativeLayout
         android:orientation="horizontal"
@@ -24,11 +37,12 @@
         android:layout_height="80dp"
         android:gravity="center_vertical"
         android:padding="10dp"
-        android:background="#0AAA0A"
+        android:background="#FF000000"
         android:layout_gravity="bottom"
         android:layout_weight="0"
         android:clickable="false"
-        android:id="@+id/controls_layout">
+        android:id="@+id/controls_layout"
+        android:focusable="false">
 
         <FrameLayout
             android:layout_width="50dp"
@@ -54,17 +68,20 @@
             android:text="color name"
             android:id="@+id/colorName"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:textColor="#FFFFFFFF" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="#FFFFFF"
+            android:text="RGB\n#FFFFFF"
             android:id="@+id/colorValue"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:textColor="#FFFFFFFF" />
 
     </RelativeLayout>
+
 </LinearLayout>
