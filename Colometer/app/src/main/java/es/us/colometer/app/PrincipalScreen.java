@@ -3,7 +3,6 @@ package es.us.colometer.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
-import es.us.colometer.app.camera.CameraFocus;
 import es.us.colometer.app.camera.CameraManager;
 import es.us.colometer.app.Color.ColorFormats;
 import es.us.colometer.app.Color.ColorModelConverter;
@@ -34,7 +32,7 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
     // Activity life-cycle methods -----------------------------------------------------------------
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        System.out.println("onCreate -------------------------------------------------------------------");
+        Log.d("APP LIFECYCLE","Principal screen onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_welcome);
 
@@ -49,27 +47,26 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
 
         camera.setPreviewCallback(this);
         camPreview.getHolder().addCallback(this);
-        camera.setPreviewCallback(this);
-        camera.getParameters().setPreviewSize(480, 640);
-        camera.startPreview();
 
         // Set options layout on click listener
         RelativeLayout controlsLayout = (RelativeLayout) findViewById(R.id.controls_layout);
         controlsLayout.setOnClickListener(new View.OnClickListener() {
-                                              @Override
-                                              public void onClick(View view) {
-                                                  navigateSettingsMenu();
-                                              }
-                                          }
+            @Override
+            public void onClick(View view) {
+                navigateSettingsMenu();
+            }
+        }
         );
 
-        // Draw camera focus
-        FrameLayout cameraFocus = (FrameLayout) findViewById(R.id.cameraFocus);
-        cameraFocus.addView(new CameraFocus(this));
+        // Estaba en el onSurfaceCreated
+        camera.setPreviewCallback(this);
+        camera.getParameters().setPreviewSize(480, 640);
+        camera.startPreview();
     }
 
     @Override
     public void onResume() {
+        Log.d("APP LIFECYCLE","Principal screen onResume");
         super.onResume();
 
         try {
@@ -82,15 +79,18 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
 
     @Override
     public void onStop() {
+        Log.d("APP LIFECYCLE","Principal screen onStop");
         super.onStop();
         camera.unlock();
     }
 
     @Override
     public void onDestroy() {
+        Log.d("APP LIFECYCLE","Principal screen onDestroy");
         super.onDestroy();
 
         camera.release();
+        Log.d("DEBUG","Camera released!");
         camera = null;
     }
 
@@ -121,7 +121,6 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, now tell the camera where to draw the preview.
-        Log.d("David", "surfaceCreated");
         try {
             camera.setPreviewDisplay(holder);
         } catch (IOException e) {
@@ -132,8 +131,6 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d("David", "surfaceChanged");
-        // no sé de qué va esto, pero lo copio
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.
         if (holder.getSurface() == null) {
@@ -162,8 +159,7 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // nose
-        Log.d("David", "surfaceDestroyed");
+        // nothing to do
     }
 
     // Color picker methods ------------------------------------------------------------------------
@@ -198,9 +194,7 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
     private void updateColorData(int color){
         // Update color value
         TextView colorValue = (TextView) findViewById(R.id.colorValue);
-        //TODO: get color model name from share preferences
-        String colorModel = "RGB";
-        colorValue.setText(colorModel+"\n#"+String.format("%x",color));
+        colorValue.setText("#"+String.format("%x",color));
 
         // Update color
         FrameLayout colorSample = (FrameLayout) findViewById(R.id.colorSample);
