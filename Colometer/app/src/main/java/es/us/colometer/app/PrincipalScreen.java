@@ -11,6 +11,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -96,7 +97,7 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
     }
 
 
-    // Camera Callbacks
+    // Camera Callbacks ----------------------------------------------------------------------------
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         // By default preview data is in NV21 format, if needed it must be converted
@@ -108,11 +109,11 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         int[] pixels = converter.convert(data, ColorFormats.RGB);
 
         int color = pickColor(pixels, height, width);
+        updateColorData(color);
     }
 
 
-    // SurfaceHolder Callbacks
-
+    // SurfaceHolder Callbacks ---------------------------------------------------------------------
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, now tell the camera where to draw the preview.
@@ -185,6 +186,15 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         res = sum/total;
 
         return res;
+    }
+
+    /**
+     * Update color name, color value and color displayed into the layout
+     * */
+    private void updateColorData(int color){
+        // Update color value
+        TextView colorValue = (TextView) findViewById(R.id.colorValue);
+        colorValue.setText("#"+String.format("%x",color));
     }
 
 
