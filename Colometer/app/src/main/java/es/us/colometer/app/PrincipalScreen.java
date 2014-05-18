@@ -195,6 +195,10 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         // Update color value
         TextView colorValue = (TextView) findViewById(R.id.colorValue);
         colorValue.setText("#"+String.format("%x",color));
+
+        // Update color
+        FrameLayout colorSample = (FrameLayout) findViewById(R.id.colorSample);
+        colorSample.setBackgroundColor(color);
     }
 
 
