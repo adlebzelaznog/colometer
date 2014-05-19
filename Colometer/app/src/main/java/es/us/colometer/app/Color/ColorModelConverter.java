@@ -1,5 +1,7 @@
 package es.us.colometer.app.Color;
 
+import android.graphics.Color;
+
 /**
   Class that performs color model conversions.
   Android camera display previews in NV21 (YUV) format so only
@@ -30,7 +32,8 @@ public class ColorModelConverter {
     public int[] convert(byte[] data, ColorFormats format){
         int[] res;
 
-        //if(format == 0)
+        // TODO: only convert data if color model is not NV21
+        //if(format.equals(ColorFormats.RGB))
             res = convertYUV420_NV21toARGB8888(data);
 
         return res;
