@@ -1,6 +1,5 @@
 package es.us.colometer.app.Color;
 
-import android.graphics.Color;
 
 /**
   Class that performs color model conversions.
@@ -10,14 +9,13 @@ import android.graphics.Color;
 public class ColorModelConverter {
 
     // Attributes ----------------------------------------------------------------------------------
-    private int mHeight, mWidth, mSize;
+    private int mWidth, mSize;
 
     // Constructor ---------------------------------------------------------------------------------
     public ColorModelConverter(int height, int width){
         if(height <= 0 || width <= 0 )
             throw new IllegalArgumentException("Invalid height or width. Both must be greater than zero");
 
-        mHeight = height;
         mWidth = width;
         mSize = width*height;
     }
@@ -46,14 +44,13 @@ public class ColorModelConverter {
      * @param data - preview data in YUV420_NV21 format
      * */
     private int[] convertYUV420_NV21toARGB8888(byte [] data) {
-        int size = mWidth*mHeight;
-        int offset = size;
-        int[] pixels = new int[size];
+        int offset = mSize;
+        int[] pixels = new int[mSize];
         int u, v, y1, y2, y3, y4;
 
         // i along Y and the final pixels
         // k along pixels U and V
-        for(int i=0, k=0; i < size; i+=2, k+=2) {
+        for(int i=0, k=0; i < mSize; i+=2, k+=2) {
             y1 = data[i  ]&0xff;
             y2 = data[i+1]&0xff;
             y3 = data[mWidth+i  ]&0xff;
