@@ -110,6 +110,7 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         int width = previewSize.width;
 
         ColorModelConverter converter = new ColorModelConverter(height, width);
+        // TODO: only convert data if color model is not NV21
         int[] pixels = converter.convert(data, ColorFormats.RGB);
 
         int color = pickColor(pixels, height, width);
@@ -194,7 +195,9 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
     private void updateColorData(int color){
         // Update color value
         TextView colorValue = (TextView) findViewById(R.id.colorValue);
-        colorValue.setText("#"+String.format("%x",color));
+        // TODO: get color model from shared preferences
+        String colorModel = "RGB";
+        colorValue.setText(colorModel+"\n#"+String.format("%x",color));
 
         // Update color
         FrameLayout colorSample = (FrameLayout) findViewById(R.id.colorSample);
