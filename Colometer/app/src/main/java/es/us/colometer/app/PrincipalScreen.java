@@ -207,8 +207,11 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         // Update color value
         TextView colorValue = (TextView) findViewById(R.id.colorValue);
         String colorModel = "";
+
         if(this.colorFormat.equals(ColorFormats.RGB))
             colorModel = "RGB";
+        else if(this.colorFormat.equals(ColorFormats.NV21))
+            colorModel = "NV21";
 
         colorValue.setText(colorModel+"\n#"+String.format("%x",color));
 
