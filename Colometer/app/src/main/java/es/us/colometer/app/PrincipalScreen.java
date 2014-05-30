@@ -116,15 +116,21 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         // By default preview data is in NV21 format, if needed it must be converted
-        Camera.Size previewSize = camera.getParameters().getPreviewSize();
-        int height = previewSize.height;
-        int width = previewSize.width;
+       try{
+            Camera.Size previewSize = camera.getParameters().getPreviewSize();
+            int height = previewSize.height;
+            int width = previewSize.width;
 
-        ColorModelConverter converter = new ColorModelConverter(height, width);
-        int[] pixels = converter.convert(data, this.colorFormat);
+            ColorModelConverter converter = new ColorModelConverter(height, width);
+            int[] pixels = converter.convert(data, this.colorFormat);
 
-        int color = pickColor(pixels, height, width);
-        updateColorData(color);
+            int color = pickColor(pixels, height, width);
+            updateColorData(color);
+       }
+       catch(RuntimeException oops){
+           // Do nothing, exception is thrown because onPreviewFrame is called after camera is released
+           Log.i("INFO", "RuntimeException thrown into onPreviewFrame");
+       }
     }
 
 
