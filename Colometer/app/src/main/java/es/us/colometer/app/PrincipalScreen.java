@@ -42,8 +42,6 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_welcome);
 
-        loadUserPreferences();
-
         // Set camera preview layout
         camera = CameraManager.getCameraInstance();
 
@@ -69,10 +67,6 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         }
         );
 
-        // Draw camera focus
-        FrameLayout cameraFocus = (FrameLayout) findViewById(R.id.cameraFocus);
-        cameraFocus.addView(new CameraFocus(this));
-
     }
 
     @Override
@@ -86,6 +80,13 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
             Log.e("ERROR", "error trying to reconnect the camera", oops);
         }
 
+        loadUserPreferences();
+
+        // Draw camera focus
+        FrameLayout cameraFocus = (FrameLayout) findViewById(R.id.cameraFocus);
+        if(cameraFocus.getChildCount() > 0)
+            cameraFocus.removeViewAt(0);
+        cameraFocus.addView(new CameraFocus(this, this.cameraFocusRadius));
     }
 
     @Override

@@ -94,7 +94,8 @@ public class Settings extends Activity{
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getApplicationContext(), "radius changed to "+mFocusRadius, Toast.LENGTH_LONG).show();
+                mPreferencesEditor.putInt("focusRadius", mFocusRadius);
+                mPreferencesEditor.commit();
             }
         });
     }

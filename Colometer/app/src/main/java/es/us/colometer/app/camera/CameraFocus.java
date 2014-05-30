@@ -1,6 +1,7 @@
 package es.us.colometer.app.camera;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,8 +12,12 @@ import android.view.View;
  */
 public class CameraFocus extends View {
 
-    public CameraFocus(Context context){
+    private int mRadius;
+
+    public CameraFocus(Context context, int radius){
         super(context);
+
+        mRadius = radius;
     }
 
     @Override
@@ -21,8 +26,7 @@ public class CameraFocus extends View {
 
         int x = getWidth();
         int y = getHeight();
-        // TODO: get radius from shared preferences
-        int radius = 20;
+        int radius = mRadius;
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
