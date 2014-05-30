@@ -27,11 +27,19 @@ public class Settings extends Activity{
 
         setContentView(R.layout.config);
 
+
+
+        // TODO: use custom "option layout" instead of linear layout
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Antes estaba en el onCreate
         loadUserPreferences();
 
         loadOptions();
-
-        // TODO: use custom "option layout" instead of linear layout
     }
 
     @Override
