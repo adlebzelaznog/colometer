@@ -1,21 +1,21 @@
 package es.us.colometer.app.Color;
 
+
 /**
-  Class that performs color model conversions.
-  Android camera display previews in NV21 (YUV) format so only
-  conversions from YUV format are needed.
+ Class that performs color model conversions.
+ Android camera display previews in NV21 (YUV) format so only
+ conversions from YUV format are needed.
  */
 public class ColorModelConverter {
 
     // Attributes ----------------------------------------------------------------------------------
-    private int mHeight, mWidth, mSize;
+    private int mWidth, mSize;
 
     // Constructor ---------------------------------------------------------------------------------
     public ColorModelConverter(int height, int width){
         if(height <= 0 || width <= 0 )
             throw new IllegalArgumentException("Invalid height or width. Both must be greater than zero");
 
-        mHeight = height;
         mWidth = width;
         mSize = width*height;
     }
@@ -28,12 +28,30 @@ public class ColorModelConverter {
      * @param format    - desired format.
      * */
     public int[] convert(byte[] data, ColorFormats format){
-        int[] res;
+        int[] res = null;
 
-        //if(format == 0)
+        if(format.equals(ColorFormats.RGB))
             res = convertYUV420_NV21toARGB8888(data);
+        else if(format.equals(ColorFormats.NV21))
+            res = parseToInteger(data);
 
         return res;
+    }
+
+    /**
+     * Due to no conversion is needed this method only parses byte array to int array (get an integer
+     * value from a byte).
+     *
+     * @param data - - preview data in YUV420_NV21 format
+     * */
+    private int[] parseToInteger(byte[] data){
+        int dataArrayLength = data.length;
+        int[] pixels = new int[dataArrayLength];
+
+        for (int i=1; i<dataArrayLength; i++)
+            pixels[i] = data[i];
+
+        return pixels;
     }
 
     /**
@@ -43,14 +61,13 @@ public class ColorModelConverter {
      * @param data - preview data in YUV420_NV21 format
      * */
     private int[] convertYUV420_NV21toARGB8888(byte [] data) {
-        int size = mWidth*mHeight;
-        int offset = size;
-        int[] pixels = new int[size];
+        int offset = mSize;
+        int[] pixels = new int[mSize];
         int u, v, y1, y2, y3, y4;
 
         // i along Y and the final pixels
         // k along pixels U and V
-        for(int i=0, k=0; i < size; i+=2, k+=2) {
+        for(int i=0, k=0; i < mSize; i+=2, k+=2) {
             y1 = data[i  ]&0xff;
             y2 = data[i+1]&0xff;
             y3 = data[mWidth+i  ]&0xff;
