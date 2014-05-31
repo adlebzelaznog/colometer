@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -16,6 +17,7 @@ public class SettingsValueSelection extends Activity {
     // Activity methods ----------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("APP LIFECYCLE", "SettingsValueSelection onCreate");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.color_model_list);
@@ -61,6 +63,7 @@ public class SettingsValueSelection extends Activity {
 
     @Override
     protected void onDestroy() {
+        Log.d("APP LIFECYCLE", "SettingsValueSelection onDestroy");
         super.onDestroy();
 
         SharedPreferences userPreferences = getSharedPreferences("colometerPreferences", Context.MODE_PRIVATE);

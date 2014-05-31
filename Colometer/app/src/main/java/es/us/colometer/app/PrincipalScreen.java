@@ -51,9 +51,7 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         previewLayout = (FrameLayout) findViewById(R.id.camera_preview);
         previewLayout.addView(camPreview);
 
-        camera.setPreviewCallback(this);
         camPreview.getHolder().addCallback(this);
-        camera.setPreviewCallback(this);
         camera.getParameters().setPreviewSize(480, 640);
         camera.startPreview();
 
@@ -81,6 +79,9 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         }
 
         loadUserPreferences();
+
+        // Antes estaba en el onCreate
+        camera.setPreviewCallback(this);
 
         // Draw camera focus
         FrameLayout cameraFocus = (FrameLayout) findViewById(R.id.cameraFocus);
@@ -127,10 +128,12 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
 
             int color = pickColor(pixels, height, width);
             updateColorData(color);
+
+           Log.i("FRAME PREVIEW", "Color updated");
        }
        catch(RuntimeException oops){
            // Do nothing, exception is thrown because onPreviewFrame is called after camera is released
-           Log.i("INFO", "RuntimeException thrown into onPreviewFrame");
+           Log.i("FRAME PREVIEW", "RuntimeException thrown into onPreviewFrame");
        }
     }
 
@@ -234,6 +237,7 @@ public class PrincipalScreen extends Activity implements SurfaceHolder.Callback,
         this.cameraFocusRadius = userPreferences.getInt("focusRadius", 20);
         this.colorFormat = ColorFormats.valueOf(userPreferences.getString("colorModel", "RGB"));
 
+        Log.i("USER PREFERENCES", "color model: "+this.colorFormat+" --- focus radius: "+this.cameraFocusRadius);
     }
 
 }

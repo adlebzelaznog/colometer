@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -23,17 +24,17 @@ public class Settings extends Activity{
     // Activity methods ----------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("APP LIFECYCLE", "Settings onCreate");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.config);
-
-
 
         // TODO: use custom "option layout" instead of linear layout
     }
 
     @Override
     protected void onResume() {
+        Log.d("APP LIFECYCLE", "Settings onResume");
         super.onResume();
 
         // Antes estaba en el onCreate
@@ -44,6 +45,7 @@ public class Settings extends Activity{
 
     @Override
     protected void onDestroy(){
+        Log.d("APP LIFECYCLE", "Settings onDestroy");
         super.onDestroy();
 
         mPreferences = getSharedPreferences("colometerPreferences", Context.MODE_PRIVATE);
